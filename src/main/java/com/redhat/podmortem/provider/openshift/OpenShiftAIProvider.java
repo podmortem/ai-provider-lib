@@ -4,10 +4,10 @@ import com.redhat.podmortem.common.model.analysis.AnalysisResult;
 import com.redhat.podmortem.common.model.provider.AIProvider;
 import com.redhat.podmortem.common.model.provider.AIProviderConfig;
 import com.redhat.podmortem.common.model.provider.AIResponse;
-import com.redhat.podmortem.common.model.provider.ProviderCapabilities;
 import com.redhat.podmortem.common.model.provider.ValidationResult;
 import com.redhat.podmortem.provider.openshift.dto.Request;
 import com.redhat.podmortem.provider.openshift.dto.Response;
+import com.redhat.podmortem.provider.service.PromptTemplateService;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
@@ -25,17 +25,19 @@ public class OpenShiftAIProvider implements AIProvider {
 
     @Inject @RestClient OpenShiftAIClient restClient;
 
+    @Inject PromptTemplateService promptService;
+
     @Override
     public Uni<AIResponse> generateExplanation(AnalysisResult result, AIProviderConfig config) {
-        String userPrompt = "Analyze the following pod failure: " + result.toString();
-        String systemPrompt =
-                "You are a Kubernetes expert and will be given analysis of a failed pod. Provide a concise explanation.";
+        String userPrompt = promptService.buildUserPrompt(result);
+        String systemPrompt = promptService.getSystemPrompt();
 
         var requestBody = new Request();
         requestBody.setModel(config.getModelId());
         requestBody.setStream(false);
-        requestBody.setMaxTokens(500);
-        requestBody.setTemperature(0.3);
+        // Use values from the config object
+        requestBody.setMaxTokens(config.getMaxTokens());
+        requestBody.setTemperature(config.getTemperature());
         requestBody.setMessages(
                 List.of(
                         Map.of("role", "system", "content", systemPrompt),
@@ -60,11 +62,6 @@ public class OpenShiftAIProvider implements AIProvider {
                         config.getModelId(),
                         "Connection successful (mocked).");
         return Uni.createFrom().item(result);
-    }
-
-    @Override
-    public ProviderCapabilities getCapabilities() {
-        return new ProviderCapabilities(true, 4096, List.of("mistral-7b-instruct"), "Varies", 0.0);
     }
 
     @Override
