@@ -59,14 +59,14 @@ public class OllamaProvider implements AIProvider {
     }
 
     private AIResponse toAIResponse(
-            Response osResponse, AIProviderConfig config, Instant requestStart) {
+            Response response, AIProviderConfig config, Instant requestStart) {
         Instant responseEnd = Instant.now();
         AIResponse aiResponse = new AIResponse();
         aiResponse.setProviderId(getProviderId());
         aiResponse.setModelId(config.getModelId());
-        aiResponse.setGeneratedAt(osResponse.getCreatedAt());
-        aiResponse.setExplanation(osResponse.getResponse());
-        aiResponse.setTokenCount(osResponse.getEvalCount());
+        aiResponse.setGeneratedAt(response.getCreatedAt());
+        aiResponse.setExplanation(response.getResponse());
+        aiResponse.setTokenCount(response.getEvalCount());
         aiResponse.setProcessingTime(Duration.between(requestStart, responseEnd));
         return aiResponse;
     }
