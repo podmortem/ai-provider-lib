@@ -1,0 +1,17 @@
+package com.redhat.podmortem.provider.openai;
+
+import com.redhat.podmortem.provider.openai.dto.Request;
+import com.redhat.podmortem.provider.openai.dto.Response;
+import io.smallrye.mutiny.Uni;
+import jakarta.ws.rs.HeaderParam;
+import jakarta.ws.rs.POST;
+import java.net.URI;
+import org.eclipse.microprofile.rest.client.inject.RegisterRestClient;
+
+@RegisterRestClient(baseUri = "https://api.openai.com/v1/chat/completions") // overridden at runtime
+public interface OpenAIClient {
+
+    @POST
+    Uni<Response> getCompletion(
+            URI baseUri, @HeaderParam("Authorization") String bearerToken, Request requestBody);
+}
