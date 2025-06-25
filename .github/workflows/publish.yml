@@ -48,6 +48,6 @@ jobs:
         run: mvn -B --no-transfer-progress help:evaluate -Dexpression=project.version -q -DforceStdout
 
       - name: Build and Publish Package
-        run: mvn -B --no-transfer-progress deploy
+        run: mvn -B --no-transfer-progress -s src/main/resources/settings.xml deploy
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
