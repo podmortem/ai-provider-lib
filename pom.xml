@@ -33,12 +33,12 @@
         <repository>
             <id>github</id>
             <name>GitHub Packages</name>
-            <url>https://maven.pkg.github.com/podmortem/common-lib</url>
+            <url>https://maven.pkg.github.com/podmortem/ai-provider-lib</url>
         </repository>
         <snapshotRepository>
             <id>github</id>
             <name>GitHub Packages</name>
-            <url>https://maven.pkg.github.com/podmortem/common-lib</url>
+            <url>https://maven.pkg.github.com/podmortem/ai-provider-lib</url>
         </snapshotRepository>
     </distributionManagement>
 
