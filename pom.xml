@@ -68,6 +68,10 @@
             <artifactId>quarkus-rest-client-jackson</artifactId>
         </dependency>
         <dependency>
+            <groupId>io.quarkus</groupId>
+            <artifactId>quarkus-qute</artifactId>
+        </dependency>
+        <dependency>
             <groupId>com.redhat.podmortem</groupId>
             <artifactId>common</artifactId>
             <version>${podmortem.common.lib.version}</version>

@@ -1,0 +1,21 @@
+Analyze this pod failure based on the following log analysis results:
+
+**Pod Information:**
+- Namespace: {result.podNamespace}
+- Pod Name: {result.podName}
+- Container: {result.containerName}
+- Exit Code: {result.exitCode}
+- Termination Reason: {result.terminationReason}
+
+**Critical Events Found:**
+{#for event in result.criticalEvents}
+- Pattern: {event.patternName} (Score: {event.score})
+  Line {event.lineNumber}: {event.logLine}
+{/for}
+
+**Analysis Summary:**
+- Total patterns matched: {result.patternSummary.totalPatterns}
+- Highest severity: {result.patternSummary.maxSeverity}
+- Most frequent pattern: {result.patternSummary.mostFrequentPattern}
+
+Please provide a concise explanation of why this pod failed and what led to the failure.
