@@ -1,5 +1,5 @@
 {
-  "name": "podmortem-<APP NAME>",
+  "name": "podmortem-ai-provider-lib",
   "build": {
     "dockerfile": "./Containerfile.java21"
   },
