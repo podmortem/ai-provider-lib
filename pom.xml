@@ -18,25 +18,25 @@
         <skipITs>true</skipITs>
         <surefire-plugin.version>3.5.3</surefire-plugin.version>
 
-        <podmortem.common.lib.version>1.0-8ce41f1-SNAPSHOT</podmortem.common.lib.version>
+        <podmortem.common.lib.version>1.0-7a21702-SNAPSHOT</podmortem.common.lib.version>
     </properties>
 
     <repositories>
         <repository>
-            <id>github</id>
-            <name>GitHub podmortem Apache Maven Packages</name>
+            <id>github-common</id>
+            <name>Common Library</name>
             <url>https://maven.pkg.github.com/podmortem/common-lib</url>
         </repository>
     </repositories>
 
     <distributionManagement>
         <repository>
-            <id>github</id>
+            <id>github-ai-provider</id>
             <name>GitHub Packages</name>
             <url>https://maven.pkg.github.com/podmortem/ai-provider-lib</url>
         </repository>
         <snapshotRepository>
-            <id>github</id>
+            <id>github-ai-provider</id>
             <name>GitHub Packages</name>
             <url>https://maven.pkg.github.com/podmortem/ai-provider-lib</url>
         </snapshotRepository>
