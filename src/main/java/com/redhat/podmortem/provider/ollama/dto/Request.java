@@ -1,7 +1,9 @@
 package com.redhat.podmortem.provider.ollama.dto;
 
+import io.quarkus.runtime.annotations.RegisterForReflection;
 import java.io.Serializable;
 
+@RegisterForReflection
 public class Request implements Serializable {
     private static final long serialVersionUID = 1L;
 

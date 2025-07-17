@@ -1,9 +1,11 @@
 package com.redhat.podmortem.provider.openai.dto;
 
+import io.quarkus.runtime.annotations.RegisterForReflection;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 
+@RegisterForReflection
 public class Request implements Serializable {
     private static final long serialVersionUID = 1L;
 

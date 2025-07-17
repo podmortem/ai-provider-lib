@@ -1,9 +1,11 @@
 package com.redhat.podmortem.provider.ollama.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import io.quarkus.runtime.annotations.RegisterForReflection;
 import java.io.Serializable;
 import java.time.Instant;
 
+@RegisterForReflection
 public class Response implements Serializable {
     private static final long serialVersionUID = 1L;
 
