@@ -16,14 +16,12 @@ import jakarta.inject.Named;
 import java.net.URI;
 import java.time.Duration;
 import java.time.Instant;
-import org.eclipse.microprofile.rest.client.inject.RestClient;
+import org.eclipse.microprofile.rest.client.RestClientBuilder;
 
 @ApplicationScoped
 @Named("ollama")
 @RegisterForReflection
 public class OllamaProvider implements AIProvider {
-
-    @Inject @RestClient OllamaClient restClient;
 
     @Inject PromptTemplateService promptService;
 
@@ -39,8 +37,13 @@ public class OllamaProvider implements AIProvider {
 
         Instant requestStart = Instant.now();
 
-        return restClient
-                .getCompletion(URI.create(config.getApiUrl()), requestBody)
+        // create REST client
+        OllamaClient client =
+                RestClientBuilder.newBuilder()
+                        .baseUri(URI.create(config.getApiUrl()))
+                        .build(OllamaClient.class);
+
+        return client.getCompletion(requestBody)
                 .map(osResponse -> toAIResponse(osResponse, config, requestStart));
     }
 

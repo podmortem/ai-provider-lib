@@ -18,14 +18,12 @@ import java.time.Duration;
 import java.time.Instant;
 import java.util.List;
 import java.util.Map;
-import org.eclipse.microprofile.rest.client.inject.RestClient;
+import org.eclipse.microprofile.rest.client.RestClientBuilder;
 
 @ApplicationScoped
 @Named("openai")
 @RegisterForReflection
 public class OpenAIProvider implements AIProvider {
-
-    @Inject @RestClient OpenAIClient restClient;
 
     @Inject PromptTemplateService promptService;
 
@@ -44,11 +42,13 @@ public class OpenAIProvider implements AIProvider {
 
         Instant requestStart = Instant.now();
 
-        return restClient
-                .getCompletion(
-                        URI.create(config.getApiUrl()),
-                        "Bearer " + config.getAuthToken(),
-                        requestBody)
+        // create REST client
+        OpenAIClient client =
+                RestClientBuilder.newBuilder()
+                        .baseUri(URI.create(config.getApiUrl()))
+                        .build(OpenAIClient.class);
+
+        return client.getCompletion("Bearer " + config.getAuthToken(), requestBody)
                 .map(osResponse -> toAIResponse(osResponse, config, requestStart));
     }
 
