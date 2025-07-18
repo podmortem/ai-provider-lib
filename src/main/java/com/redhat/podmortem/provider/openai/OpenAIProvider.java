@@ -8,6 +8,7 @@ import com.redhat.podmortem.common.model.provider.ValidationResult;
 import com.redhat.podmortem.provider.openai.dto.Request;
 import com.redhat.podmortem.provider.openai.dto.Response;
 import com.redhat.podmortem.provider.service.PromptTemplateService;
+import io.quarkus.runtime.annotations.RegisterForReflection;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
@@ -18,7 +19,6 @@ import java.time.Instant;
 import java.util.List;
 import java.util.Map;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
-import io.quarkus.runtime.annotations.RegisterForReflection;
 
 @ApplicationScoped
 @Named("openai")

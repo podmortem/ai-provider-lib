@@ -8,6 +8,7 @@ import com.redhat.podmortem.common.model.provider.ValidationResult;
 import com.redhat.podmortem.provider.ollama.dto.Request;
 import com.redhat.podmortem.provider.ollama.dto.Response;
 import com.redhat.podmortem.provider.service.PromptTemplateService;
+import io.quarkus.runtime.annotations.RegisterForReflection;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
@@ -16,7 +17,6 @@ import java.net.URI;
 import java.time.Duration;
 import java.time.Instant;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
-import io.quarkus.runtime.annotations.RegisterForReflection;
 
 @ApplicationScoped
 @Named("ollama")
