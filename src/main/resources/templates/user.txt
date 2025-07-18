@@ -1,21 +1,78 @@
-Analyze this pod failure based on the following log analysis results:
+## Pod Failure Analysis Results
 
-**Pod Information:**
-- Namespace: {result.podNamespace}
-- Pod Name: {result.podName}
-- Container: {result.containerName}
-- Exit Code: {result.exitCode}
-- Termination Reason: {result.terminationReason}
+**Analysis ID:** {result.analysisId}
 
-**Critical Events Found:**
-{#for event in result.criticalEvents}
-- Pattern: {event.patternName} (Score: {event.score})
-  Line {event.lineNumber}: {event.logLine}
+---
+
+## Pattern Detection Summary
+The automated log analysis system processed **{result.metadata.totalLines} log lines** in {result.metadata.processingTimeMs}ms and detected **{result.summary.significantEvents}** significant events with a highest severity of **{result.summary.highestSeverity}**.
+
+{#if result.metadata.patternsUsed}
+**Pattern Libraries Used:** {result.metadata.patternsUsed.join(", ")}
+{/if}
+
+---
+
+## Critical Events Detected
+The following patterns were matched and scored by confidence (higher scores indicate more likely root causes):
+
+{#for event in result.events}
+### Pattern Match - Score: {event.score}
+**Pattern:** {event.matchedPattern.name}  
+**Severity:** {event.matchedPattern.severity}  
+**Categories:** {event.matchedPattern.category.join(", ")}  
+**Log Location:** Line {event.lineNumber}
+
+**Matched Log Content:**
+```
+{#if event.context.linesBefore}
+{#for line in event.context.linesBefore}
+  {line}
+{/for}
+{/if}
+→ {event.context.matchedLine}
+{#if event.context.linesAfter}
+{#for line in event.context.linesAfter}
+  {line}
+{/for}
+{/if}
+```
+
+{#if event.matchedPattern.remediation}
+**Pattern-Based Remediation Guidance:**
+- **Problem Description:** {event.matchedPattern.remediation.description}
+{#if event.matchedPattern.remediation.commonCauses}
+- **Common Causes:** {event.matchedPattern.remediation.commonCauses.join(", ")}
+{/if}
+{#if event.matchedPattern.remediation.suggestedCommands}
+- **Suggested Commands:** 
+{#for command in event.matchedPattern.remediation.suggestedCommands}
+  * {command}
+{/for}
+{/if}
+{#if event.matchedPattern.remediation.documentationLinks}
+- **Documentation:** {event.matchedPattern.remediation.documentationLinks.join(", ")}
+{/if}
+{/if}
+
+---
 {/for}
 
-**Analysis Summary:**
-- Total patterns matched: {result.patternSummary.totalPatterns}
-- Highest severity: {result.patternSummary.maxSeverity}
-- Most frequent pattern: {result.patternSummary.mostFrequentPattern}
+## Analysis Metadata
+- **Processing Time:** {result.metadata.processingTimeMs}ms
+- **Total Log Lines:** {result.metadata.totalLines}
+- **Analysis Timestamp:** {result.metadata.analyzedAt}
 
-Please provide a concise explanation of why this pod failed and what led to the failure.
+---
+
+## Your Analysis Instructions
+
+Based on this structured analysis data:
+
+1. **Identify the Primary Root Cause:** Focus on the highest-scoring pattern matches and explain why they represent the most likely failure cause
+2. **Analyze the Event Sequence:** Describe how the detected events led to the pod failure, using the line numbers and context to build a timeline
+3. **Synthesize Multiple Patterns:** If multiple patterns were detected, explain how they relate to each other (e.g., cascading failures, multiple symptoms of the same root cause)
+4. **Provide Actionable Remediation:** Combine the pattern-based suggested commands with your expertise to give specific, prioritized remediation steps
+5. **Consider the Context:** Use the log line context to provide deeper insights beyond what the pattern matching captured
+
+Please provide a comprehensive analysis that transforms this technical data into actionable insights for a DevOps engineer.
