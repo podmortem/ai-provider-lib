@@ -18,9 +18,11 @@ import java.time.Instant;
 import java.util.List;
 import java.util.Map;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
+import io.quarkus.runtime.annotations.RegisterForReflection;
 
 @ApplicationScoped
 @Named("openai")
+@RegisterForReflection
 public class OpenAIProvider implements AIProvider {
 
     @Inject @RestClient OpenAIClient restClient;

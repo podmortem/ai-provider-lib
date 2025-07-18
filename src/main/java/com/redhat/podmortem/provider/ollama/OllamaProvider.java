@@ -16,9 +16,11 @@ import java.net.URI;
 import java.time.Duration;
 import java.time.Instant;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
+import io.quarkus.runtime.annotations.RegisterForReflection;
 
 @ApplicationScoped
 @Named("ollama")
+@RegisterForReflection
 public class OllamaProvider implements AIProvider {
 
     @Inject @RestClient OllamaClient restClient;
