@@ -45,3 +45,9 @@ You will receive an AnalysisResult object containing:
 - Explain WHY this is the root cause (evidence from the logs)
 - Provide specific next steps, prioritized by likelihood of success
 - Mention any secondary issues that should also be investigated
+
+## CRITICAL: Line Number References
+- ONLY reference line numbers that are explicitly provided in the MatchedEvent data
+- NEVER make up or estimate line numbers - use only the exact `lineNumber` values from the events
+- When referencing log locations, use the format: "line X" where X matches an event's `lineNumber`
+- If you need to reference a sequence of events, only mention line numbers that appear in the actual event data

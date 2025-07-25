@@ -30,7 +30,7 @@ The following patterns were matched and scored by confidence (higher scores indi
 - {cat}
 {/for}
 {/if}
-**Log Location:** Line {event.lineNumber}
+**Log Location:** Line {event.lineNumber} <- USE THIS EXACT LINE NUMBER
 
 **Matched Log Content:**
 ```
@@ -80,6 +80,14 @@ No specific patterns were matched in the log analysis.
 - **Processing Time:** {result.metadata.processingTimeMs}ms
 - **Total Log Lines:** {result.metadata.totalLines}
 - **Analysis Timestamp:** {result.metadata.analyzedAt}
+
+{#if result.events && result.events.size() > 0}
+## Valid Line Numbers to Reference
+When discussing events in your analysis, use ONLY these exact line numbers:
+{#for event in result.events}
+- Line {event.lineNumber}: {event.matchedPattern.name}
+{/for}
+{/if}
 
 ---
 
