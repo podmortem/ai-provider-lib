@@ -13,7 +13,7 @@ You will receive an AnalysisResult object containing:
 **AnalysisResult Structure:**
 - `analysisId`: Unique identifier for this analysis
 - `metadata`: Technical details about the analysis process
-- `summary`: High-level statistics about what was found  
+- `summary`: High-level statistics about what was found
 - `events`: Array of pattern matches, scored and ranked by likelihood
 
 **Each MatchedEvent contains:**

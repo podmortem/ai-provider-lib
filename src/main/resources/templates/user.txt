@@ -8,7 +8,7 @@
 The automated log analysis system processed **{result.metadata.totalLines} log lines** in {result.metadata.processingTimeMs}ms and detected **{result.summary.significantEvents}** significant events with a highest severity of **{result.summary.highestSeverity}**.
 
 {#if result.metadata.patternsUsed && result.metadata.patternsUsed.size() > 0}
-**Pattern Libraries Used:** 
+**Pattern Libraries Used:**
 {#for library in result.metadata.patternsUsed}
 - {library}
 {/for}
@@ -22,10 +22,10 @@ The following patterns were matched and scored by confidence (higher scores indi
 {#if result.events && result.events.size() > 0}
 {#for event in result.events}
 ### Pattern Match - Score: {event.score}
-**Pattern:** {event.matchedPattern.name}  
-**Severity:** {event.matchedPattern.severity}  
+**Pattern:** {event.matchedPattern.name}
+**Severity:** {event.matchedPattern.severity}
 {#if event.matchedPattern.category && event.matchedPattern.category.size() > 0}
-**Categories:** 
+**Categories:**
 {#for cat in event.matchedPattern.category}
 - {cat}
 {/for}
@@ -51,19 +51,19 @@ The following patterns were matched and scored by confidence (higher scores indi
 **Pattern-Based Remediation Guidance:**
 - **Problem Description:** {event.matchedPattern.remediation.description}
 {#if event.matchedPattern.remediation.commonCauses && event.matchedPattern.remediation.commonCauses.size() > 0}
-- **Common Causes:** 
+- **Common Causes:**
 {#for cause in event.matchedPattern.remediation.commonCauses}
   * {cause}
 {/for}
 {/if}
 {#if event.matchedPattern.remediation.suggestedCommands && event.matchedPattern.remediation.suggestedCommands.size() > 0}
-- **Suggested Commands:** 
+- **Suggested Commands:**
 {#for command in event.matchedPattern.remediation.suggestedCommands}
   * {command}
 {/for}
 {/if}
 {#if event.matchedPattern.remediation.documentationLinks && event.matchedPattern.remediation.documentationLinks.size() > 0}
-- **Documentation:** 
+- **Documentation:**
 {#for link in event.matchedPattern.remediation.documentationLinks}
   * {link}
 {/for}
