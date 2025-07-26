@@ -1,5 +1,6 @@
 package com.redhat.podmortem.provider.openai.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import io.quarkus.runtime.annotations.RegisterForReflection;
 import java.io.Serializable;
 import java.util.List;
@@ -12,6 +13,9 @@ public class Request implements Serializable {
     private String model;
     private List<Map<String, String>> messages;
     private boolean stream;
+
+    @JsonProperty("max_tokens")
+    private Integer maxTokens;
 
     public String getModel() {
         return model;
@@ -35,5 +39,13 @@ public class Request implements Serializable {
 
     public void setStream(boolean stream) {
         this.stream = stream;
+    }
+
+    public Integer getMaxTokens() {
+        return maxTokens;
+    }
+
+    public void setMaxTokens(Integer maxTokens) {
+        this.maxTokens = maxTokens;
     }
 }

@@ -35,6 +35,7 @@ public class OpenAIProvider implements AIProvider {
         var requestBody = new Request();
         requestBody.setModel(config.getModelId());
         requestBody.setStream(false);
+        requestBody.setMaxTokens(config.getMaxTokens());
         requestBody.setMessages(
                 List.of(
                         Map.of("role", "system", "content", systemPrompt),
