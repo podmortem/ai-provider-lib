@@ -75,7 +75,7 @@ public class OpenAIProvider implements AIProvider {
         AIResponse aiResponse = new AIResponse();
         aiResponse.setProviderId(getProviderId());
         aiResponse.setModelId(config.getModelId());
-        aiResponse.setGeneratedAt(response.getCreated());
+        aiResponse.setGeneratedAt(response.getCreatedAsInstant());
         if (response.getChoices() != null && !response.getChoices().isEmpty()) {
             var message = response.getChoices().get(0).getMessage();
             if (message != null && message.getContent() != null) {

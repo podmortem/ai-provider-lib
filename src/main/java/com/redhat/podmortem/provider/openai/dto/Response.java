@@ -14,7 +14,7 @@ public class Response implements Serializable {
 
     private String id;
     private String object;
-    private Instant created;
+    private long created;
     private String model;
 
     @JsonProperty("choices")
@@ -38,12 +38,16 @@ public class Response implements Serializable {
         this.object = object;
     }
 
-    public Instant getCreated() {
+    public long getCreated() {
         return created;
     }
 
-    public void setCreated(Instant created) {
+    public void setCreated(long created) {
         this.created = created;
+    }
+
+    public Instant getCreatedAsInstant() {
+        return Instant.ofEpochSecond(created);
     }
 
     public String getModel() {
