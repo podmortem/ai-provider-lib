@@ -3,20 +3,24 @@ package com.redhat.podmortem.provider.openai.dto;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.quarkus.runtime.annotations.RegisterForReflection;
 import java.io.Serializable;
-import java.util.List;
-import java.util.Map;
 
 @RegisterForReflection
 public class Request implements Serializable {
     private static final long serialVersionUID = 1L;
 
     private String model;
-    private List<Map<String, String>> messages;
+    private String prompt;
     private boolean stream;
 
     @JsonProperty("max_tokens")
     private Integer maxTokens;
 
+    private Double temperature;
+
+    // Constructors
+    public Request() {}
+
+    // Getters and Setters
     public String getModel() {
         return model;
     }
@@ -25,12 +29,12 @@ public class Request implements Serializable {
         this.model = model;
     }
 
-    public List<Map<String, String>> getMessages() {
-        return messages;
+    public String getPrompt() {
+        return prompt;
     }
 
-    public void setMessages(List<Map<String, String>> messages) {
-        this.messages = messages;
+    public void setPrompt(String prompt) {
+        this.prompt = prompt;
     }
 
     public boolean isStream() {
@@ -47,5 +51,13 @@ public class Request implements Serializable {
 
     public void setMaxTokens(Integer maxTokens) {
         this.maxTokens = maxTokens;
+    }
+
+    public Double getTemperature() {
+        return temperature;
+    }
+
+    public void setTemperature(Double temperature) {
+        this.temperature = temperature;
     }
 }

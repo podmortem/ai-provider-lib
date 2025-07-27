@@ -12,7 +12,7 @@ import org.eclipse.microprofile.rest.client.inject.RegisterRestClient;
 public interface OpenAIClient {
 
     @POST
-    @Path("/chat/completions")
-    Uni<Response> getCompletion(
+    @Path("/completions")
+    Uni<Response> getTextCompletion(
             @HeaderParam("Authorization") String bearerToken, Request requestBody);
 }

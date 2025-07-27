@@ -16,8 +16,6 @@ import jakarta.inject.Named;
 import java.net.URI;
 import java.time.Duration;
 import java.time.Instant;
-import java.util.List;
-import java.util.Map;
 import org.eclipse.microprofile.rest.client.RestClientBuilder;
 
 @ApplicationScoped
@@ -32,14 +30,15 @@ public class OpenAIProvider implements AIProvider {
         String userPrompt = promptService.buildUserPrompt(result);
         String systemPrompt = promptService.getSystemPrompt();
 
+        // Combine system and user prompts into a single completion prompt
+        String combinedPrompt = systemPrompt + "\n\n" + userPrompt;
+
         var requestBody = new Request();
         requestBody.setModel(config.getModelId());
         requestBody.setStream(false);
         requestBody.setMaxTokens(config.getMaxTokens());
-        requestBody.setMessages(
-                List.of(
-                        Map.of("role", "system", "content", systemPrompt),
-                        Map.of("role", "user", "content", userPrompt)));
+        requestBody.setPrompt(combinedPrompt);
+        requestBody.setTemperature(config.getTemperature());
 
         Instant requestStart = Instant.now();
 
@@ -49,7 +48,7 @@ public class OpenAIProvider implements AIProvider {
                         .baseUri(URI.create(config.getApiUrl()))
                         .build(OpenAIClient.class);
 
-        return client.getCompletion("Bearer " + config.getAuthToken(), requestBody)
+        return client.getTextCompletion("Bearer " + config.getAuthToken(), requestBody)
                 .map(osResponse -> toAIResponse(osResponse, config, requestStart));
     }
 
@@ -76,19 +75,22 @@ public class OpenAIProvider implements AIProvider {
         aiResponse.setProviderId(getProviderId());
         aiResponse.setModelId(config.getModelId());
         aiResponse.setGeneratedAt(response.getCreatedAsInstant());
+
         if (response.getChoices() != null && !response.getChoices().isEmpty()) {
-            var message = response.getChoices().get(0).getMessage();
-            if (message != null && message.getContent() != null) {
-                aiResponse.setExplanation(message.getContent());
+            var choice = response.getChoices().get(0);
+            if (choice != null && choice.getText() != null) {
+                aiResponse.setExplanation(choice.getText().trim());
             } else {
                 aiResponse.setExplanation("No explanation could be generated.");
             }
         } else {
             aiResponse.setExplanation("No explanation could be generated.");
         }
+
         if (response.getUsage() != null) {
             aiResponse.setTokenCount(response.getUsage().getTotalTokens());
         }
+
         aiResponse.setProcessingTime(Duration.between(requestStart, responseEnd));
         return aiResponse;
     }

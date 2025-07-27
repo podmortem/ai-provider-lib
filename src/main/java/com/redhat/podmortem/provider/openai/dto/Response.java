@@ -12,6 +12,40 @@ import java.util.List;
 public class Response implements Serializable {
     private static final long serialVersionUID = 1L;
 
+    @RegisterForReflection
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    public static class Choice implements Serializable {
+        private int index;
+        private String text;
+
+        @JsonProperty("finish_reason")
+        private String finishReason;
+
+        public int getIndex() {
+            return index;
+        }
+
+        public void setIndex(int index) {
+            this.index = index;
+        }
+
+        public String getText() {
+            return text;
+        }
+
+        public void setText(String text) {
+            this.text = text;
+        }
+
+        public String getFinishReason() {
+            return finishReason;
+        }
+
+        public void setFinishReason(String finishReason) {
+            this.finishReason = finishReason;
+        }
+    }
+
     private String id;
     private String object;
     private long created;
