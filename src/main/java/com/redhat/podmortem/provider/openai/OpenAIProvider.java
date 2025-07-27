@@ -77,7 +77,12 @@ public class OpenAIProvider implements AIProvider {
         aiResponse.setModelId(config.getModelId());
         aiResponse.setGeneratedAt(response.getCreated());
         if (response.getChoices() != null && !response.getChoices().isEmpty()) {
-            aiResponse.setExplanation(response.getChoices().get(0).getMessage().get("content"));
+            var message = response.getChoices().get(0).getMessage();
+            if (message != null && message.getContent() != null) {
+                aiResponse.setExplanation(message.getContent());
+            } else {
+                aiResponse.setExplanation("No explanation could be generated.");
+            }
         } else {
             aiResponse.setExplanation("No explanation could be generated.");
         }
