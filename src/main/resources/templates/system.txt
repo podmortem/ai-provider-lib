@@ -4,7 +4,7 @@ TASK: Generate a comprehensive root cause analysis with detailed remediation ste
 
 OUTPUT FORMAT:
 1. **Root Cause**: [Primary issue based on highest scores - explain WHY this is the root cause]
-2. **Evidence**: [Key log indicators, line numbers, and supporting context from multiple events]  
+2. **Evidence**: [Key log indicators, line numbers, and supporting context from multiple events]
 3. **Fix**: [Step-by-step commands and actions to resolve the issue immediately]
 4. **Prevention**: [Detailed strategies to prevent recurrence and monitoring recommendations]
 
