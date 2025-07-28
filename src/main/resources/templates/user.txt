@@ -1,104 +1,22 @@
-## Pod Failure Analysis Results
+ANALYSIS: {result.analysisId}
+EVENTS: {result.summary.significantEvents} | SEVERITY: {result.summary.highestSeverity}
 
-**Analysis ID:** {result.analysisId}
-
----
-
-## Pattern Detection Summary
-The automated log analysis system processed **{result.metadata.totalLines} log lines** in {result.metadata.processingTimeMs}ms and detected **{result.summary.significantEvents}** significant events with a highest severity of **{result.summary.highestSeverity}**.
-
-{#if result.metadata.patternsUsed && result.metadata.patternsUsed.size() > 0}
-**Pattern Libraries Used:**
-{#for library in result.metadata.patternsUsed}
-- {library}
-{/for}
-{/if}
-
----
-
-## Critical Events Detected
-The following patterns were matched and scored by confidence (higher scores indicate more likely root causes):
-
+TOP PATTERNS:
 {#if result.events && result.events.size() > 0}
 {#for event in result.events}
-### Pattern Match - Score: {event.score}
-**Pattern:** {event.matchedPattern.name}
-**Severity:** {event.matchedPattern.severity}
-{#if event.matchedPattern.category && event.matchedPattern.category.size() > 0}
-**Categories:**
-{#for cat in event.matchedPattern.category}
-- {cat}
-{/for}
-{/if}
-**Log Location:** Line {event.lineNumber} <- USE THIS EXACT LINE NUMBER
-
-**Matched Log Content:**
-```
-{#if event.context.linesBefore && event.context.linesBefore.size() > 0}
-{#for line in event.context.linesBefore}
-  {line}
-{/for}
-{/if}
-→ {event.context.matchedLine}
-{#if event.context.linesAfter && event.context.linesAfter.size() > 0}
-{#for line in event.context.linesAfter}
-  {line}
-{/for}
-{/if}
-```
-
-{#if event.matchedPattern.remediation}
-**Pattern-Based Remediation Guidance:**
-- **Problem Description:** {event.matchedPattern.remediation.description}
-{#if event.matchedPattern.remediation.commonCauses && event.matchedPattern.remediation.commonCauses.size() > 0}
-- **Common Causes:**
-{#for cause in event.matchedPattern.remediation.commonCauses}
-  * {cause}
-{/for}
-{/if}
+{#if event_index < 2}
+Score: {event.score} | Line {event.lineNumber}
+Pattern: {event.matchedPattern.name} ({event.matchedPattern.severity})
+Log: {event.context.matchedLine}
+Fix: {event.matchedPattern.remediation.description}
 {#if event.matchedPattern.remediation.suggestedCommands && event.matchedPattern.remediation.suggestedCommands.size() > 0}
-- **Suggested Commands:**
-{#for command in event.matchedPattern.remediation.suggestedCommands}
-  * {command}
-{/for}
+Command: {event.matchedPattern.remediation.suggestedCommands[0]}
 {/if}
-{#if event.matchedPattern.remediation.documentationLinks && event.matchedPattern.remediation.documentationLinks.size() > 0}
-- **Documentation:**
-{#for link in event.matchedPattern.remediation.documentationLinks}
-  * {link}
-{/for}
-{/if}
-{/if}
-
 ---
+{/if}
 {/for}
 {#else}
-No specific patterns were matched in the log analysis.
+No patterns detected.
 {/if}
 
-## Analysis Metadata
-- **Processing Time:** {result.metadata.processingTimeMs}ms
-- **Total Log Lines:** {result.metadata.totalLines}
-- **Analysis Timestamp:** {result.metadata.analyzedAt}
-
-{#if result.events && result.events.size() > 0}
-## Valid Line Numbers to Reference
-When discussing events in your analysis, use ONLY these exact line numbers:
-{#for event in result.events}
-- Line {event.lineNumber}: {event.matchedPattern.name}
-{/for}
-{/if}
-
----
-
-## Your Analysis Instructions
-
-Based on this structured analysis data:
-
-1. **Identify the Primary Root Cause:** Focus on the highest-scoring pattern matches and explain why they represent the most likely failure cause
-2. **Analyze the Event Sequence:** Describe how the detected events led to the pod failure, using the line numbers and context to build a timeline
-3. **Synthesize Multiple Patterns:** If multiple patterns were detected, explain how they relate to each other (e.g., cascading failures, multiple symptoms of the same root cause)
-4. **Provide Actionable Remediation:** Combine the pattern-based suggested commands with your expertise to give specific, prioritized remediation steps
-5. **Consider the Context:** Use the log line context to provide deeper insights beyond what the pattern matching captured
-
-Please provide a comprehensive analysis that transforms this technical data into actionable insights for a DevOps engineer.
+ANALYZE:
