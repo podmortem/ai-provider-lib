@@ -18,6 +18,15 @@ import java.time.Duration;
 import java.time.Instant;
 import org.eclipse.microprofile.rest.client.RestClientBuilder;
 
+/**
+ * OpenAI AI provider implementation for generating explanations of pod failure analysis results.
+ *
+ * <p>Integrates with OpenAI's text completion API to generate human-readable explanations.
+ * Registered as CDI bean with name "openai".
+ *
+ * @see AIProvider
+ * @see com.redhat.podmortem.provider.openai.OpenAIClient
+ */
 @ApplicationScoped
 @Named("openai")
 @RegisterForReflection
@@ -25,6 +34,14 @@ public class OpenAIProvider implements AIProvider {
 
     @Inject PromptTemplateService promptService;
 
+    /**
+     * Generates an AI-powered explanation for the given pod failure analysis result.
+     *
+     * @param result the analysis result containing pod failure information to explain
+     * @param config the AI provider configuration including API URL, model, and parameters
+     * @return a Uni that emits the AI-generated explanation with metadata
+     * @throws IllegalArgumentException if required configuration is missing
+     */
     @Override
     public Uni<AIResponse> generateExplanation(AnalysisResult result, AIProviderConfig config) {
         String userPrompt = promptService.buildUserPrompt(result);
@@ -52,8 +69,17 @@ public class OpenAIProvider implements AIProvider {
                 .map(osResponse -> toAIResponse(osResponse, config, requestStart));
     }
 
+    /**
+     * Validates the provided AI provider configuration.
+     *
+     * <p>Currently returns a mocked successful validation.
+     *
+     * @param config the configuration to validate
+     * @return a Uni that emits the validation result
+     */
     @Override
     public Uni<ValidationResult> validateConfiguration(AIProviderConfig config) {
+        // TODO: add validation, currently just a mock
         ValidationResult result =
                 new ValidationResult(
                         true,
@@ -63,11 +89,24 @@ public class OpenAIProvider implements AIProvider {
         return Uni.createFrom().item(result);
     }
 
+    /**
+     * Returns the unique identifier for this AI provider.
+     *
+     * @return the string "openai"
+     */
     @Override
     public String getProviderId() {
         return "openai";
     }
 
+    /**
+     * Converts an OpenAI API response to the internal AIResponse format.
+     *
+     * @param response the raw response from the OpenAI API
+     * @param config the configuration used for the request
+     * @param requestStart the timestamp when the request was initiated
+     * @return a formatted AIResponse with explanation text and metadata
+     */
     private AIResponse toAIResponse(
             Response response, AIProviderConfig config, Instant requestStart) {
         Instant responseEnd = Instant.now();

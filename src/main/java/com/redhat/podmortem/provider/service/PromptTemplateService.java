@@ -14,6 +14,12 @@ import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * Service for managing prompt templates used by AI providers.
+ *
+ * @see com.redhat.podmortem.provider.openai.OpenAIProvider
+ * @see com.redhat.podmortem.provider.ollama.OllamaProvider
+ */
 @ApplicationScoped
 public class PromptTemplateService {
 
@@ -37,6 +43,13 @@ public class PromptTemplateService {
     @ConfigProperty(name = "podmortem.prompts.external.enabled", defaultValue = "false")
     public boolean externalPromptsEnabled;
 
+    /**
+     * Gets the system prompt text for AI requests.
+     *
+     * <p>External prompts take precedence over built-in templates when enabled.
+     *
+     * @return the system prompt text, either from external file or built-in template
+     */
     public String getSystemPrompt() {
         if (externalPromptsEnabled) {
             String externalPrompt = loadExternalPrompt("system.txt");
@@ -50,6 +63,15 @@ public class PromptTemplateService {
         return builtInSystemPromptTemplate.render();
     }
 
+    /**
+     * Builds the user prompt text for AI requests using the provided analysis result.
+     *
+     * <p>Template receives the AnalysisResult object as a "result" variable.
+     *
+     * @param result the analysis result containing pod failure information
+     * @return the formatted user prompt text with embedded analysis data
+     * @throws RuntimeException if template processing fails with external templates
+     */
     public String buildUserPrompt(AnalysisResult result) {
         if (externalPromptsEnabled) {
             String externalPrompt = loadExternalPrompt("user.txt");
@@ -70,6 +92,12 @@ public class PromptTemplateService {
         return builtInUserPromptTemplate.data("result", result).render();
     }
 
+    /**
+     * Loads an external prompt template from the filesystem.
+     *
+     * @param filename the prompt filename to load (e.g., "system.txt", "user.txt")
+     * @return the prompt content as a string, or null if not found or error occurs
+     */
     private String loadExternalPrompt(String filename) {
         try {
             Path promptPath = Paths.get(externalPromptsPath, filename);
@@ -83,11 +111,5 @@ public class PromptTemplateService {
             log.warn("Failed to load external prompt {}: {}", filename, e.getMessage());
         }
         return null;
-    }
-
-    /** Reload external prompts - useful for development and testing */
-    public void reloadExternalPrompts() {
-        log.info("Reloading external prompts from: {}", externalPromptsPath);
-        // The next call to getSystemPrompt() or buildUserPrompt() will re-read from disk
     }
 }
