@@ -1,21 +1,25 @@
-Analysis: {result.analysisId} | Events: {result.summary.significantEvents} | Severity: {result.summary.highestSeverity}
+ANALYSIS: {result.analysisId}
+EVENTS: {result.summary.significantEvents} | SEVERITY: {result.summary.highestSeverity}
 
-DETECTED PATTERNS:
+TOP PATTERNS:
 {#if result.events && result.events.size() > 0}
 {#for event in result.events}
-{#if event_index < 4}
-#{event_index + 1} [Score: {event.score}] Line {event.lineNumber}
+{#if event_index < 3}
+Score: {event.score} | Line {event.lineNumber}
 Pattern: {event.matchedPattern.name} ({event.matchedPattern.severity})
 Log: {event.context.matchedLine}
 {#if event.context.linesBefore && event.context.linesBefore.size() > 0}
-Before: {event.context.linesBefore[0]}
+Context Before: {event.context.linesBefore[0]}
 {/if}
 {#if event.context.linesAfter && event.context.linesAfter.size() > 0}
-After: {event.context.linesAfter[0]}
+Context After: {event.context.linesAfter[0]}
 {/if}
-Issue: {event.matchedPattern.remediation.description}
+Problem: {event.matchedPattern.remediation.description}
 {#if event.matchedPattern.remediation.suggestedCommands && event.matchedPattern.remediation.suggestedCommands.size() > 0}
-Fix: {event.matchedPattern.remediation.suggestedCommands[0]}
+Command: {event.matchedPattern.remediation.suggestedCommands[0]}
+{/if}
+{#if event.matchedPattern.remediation.commonCauses && event.matchedPattern.remediation.commonCauses.size() > 0}
+Common Cause: {event.matchedPattern.remediation.commonCauses[0]}
 {/if}
 ---
 {/if}
@@ -24,4 +28,4 @@ Fix: {event.matchedPattern.remediation.suggestedCommands[0]}
 No patterns detected.
 {/if}
 
-Analyze these patterns and provide diagnosis.
+ANALYZE:
