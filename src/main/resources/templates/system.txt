@@ -16,3 +16,4 @@ CONSTRAINTS:
 - Include multiple related events if they build a story
 - Keep response under 400 words but be thorough
 - Explain the sequence of events that led to failure (initial trigger -> cascade -> final state)
+- When multiple patterns appear, explain HOW the first failure CAUSED subsequent ones.
