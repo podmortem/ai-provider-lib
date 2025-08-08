@@ -1,31 +1,57 @@
-ANALYSIS: {result.analysisId}
-EVENTS: {result.summary.significantEvents} | SEVERITY: {result.summary.highestSeverity}
+<analysis_metadata>
+ID: {result.analysisId}
+Total Events: {result.summary.significantEvents}
+Max Severity: {result.summary.highestSeverity}
+</analysis_metadata>
 
-TOP PATTERNS:
+<detected_patterns>
 {#if result.events && result.events.size() > 0}
 {#for event in result.events}
-{#if event_index < 3}
-Score: {event.score} | Line {event.lineNumber}
-Pattern: {event.matchedPattern.name} ({event.matchedPattern.severity})
-Log: {event.context.matchedLine}
-{#if event.context.linesBefore && event.context.linesBefore.size() > 0}
-Context Before: {event.context.linesBefore[0]}
-{/if}
-{#if event.context.linesAfter && event.context.linesAfter.size() > 0}
-Context After: {event.context.linesAfter[0]}
-{/if}
-Problem: {event.matchedPattern.remediation.description}
-{#if event.matchedPattern.remediation.suggestedCommands && event.matchedPattern.remediation.suggestedCommands.size() > 0}
-Command: {event.matchedPattern.remediation.suggestedCommands[0]}
-{/if}
-{#if event.matchedPattern.remediation.commonCauses && event.matchedPattern.remediation.commonCauses.size() > 0}
-Common Cause: {event.matchedPattern.remediation.commonCauses[0]}
-{/if}
----
+{#if event_index < 5}
+<pattern rank="{event_index + 1}">
+  <score>{event.score}</score>
+  <line>{event.lineNumber}</line>
+  <type>{event.matchedPattern.name}</type>
+  <severity>{event.matchedPattern.severity}</severity>
+  <matched_text>{event.context.matchedLine}</matched_text>
+  {#if event.context.linesBefore && event.context.linesBefore.size() > 0}
+  <before_context>{event.context.linesBefore[0]}</before_context>
+  {/if}
+  {#if event.context.linesAfter && event.context.linesAfter.size() > 0}
+  <after_context>{event.context.linesAfter[0]}</after_context>
+  {/if}
+  <pattern_info>
+    <description>{event.matchedPattern.remediation.description}</description>
+    {#if event.matchedPattern.remediation.commonCauses && event.matchedPattern.remediation.commonCauses.size() > 0}
+    <possible_causes>
+    {#for cause in event.matchedPattern.remediation.commonCauses}
+    - {cause}
+    {/for}
+    </possible_causes>
+    {/if}
+    {#if event.matchedPattern.remediation.suggestedCommands && event.matchedPattern.remediation.suggestedCommands.size() > 0}
+    <suggested_actions>
+    {#for cmd in event.matchedPattern.remediation.suggestedCommands}
+    - {cmd}
+    {/for}
+    </suggested_actions>
+    {/if}
+  </pattern_info>
+</pattern>
 {/if}
 {/for}
-{#else}
-No patterns detected.
+
+{#if result.events.size() > 5}
+<additional_patterns count="{result.events.size() - 5}">
+Lower-scoring patterns detected but omitted for brevity.
+</additional_patterns>
 {/if}
 
-ANALYZE:
+{#else}
+<no_patterns>
+No failure patterns detected in the log analysis.
+</no_patterns>
+{/if}
+</detected_patterns>
+
+Analyze the detected patterns and provide your diagnostic assessment following the specified output structure.
