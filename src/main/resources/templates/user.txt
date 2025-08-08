@@ -4,7 +4,7 @@ EVENTS: {result.summary.significantEvents} | SEVERITY: {result.summary.highestSe
 TOP PATTERNS:
 {#if result.events && result.events.size() > 0}
 {#for event in result.events}
-{#if event_index < 3}
+{#if event_index < 5}
 Score: {event.score} | Line {event.lineNumber}
 Pattern: {event.matchedPattern.name} ({event.matchedPattern.severity})
 Log: {event.context.matchedLine}
@@ -28,4 +28,4 @@ Common Cause: {event.matchedPattern.remediation.commonCauses[0]}
 No patterns detected.
 {/if}
 
-ANALYZE:
+ANALYZE (Step-by-step: initial error -> propagation -> final failure):

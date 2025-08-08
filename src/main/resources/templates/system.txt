@@ -10,8 +10,9 @@ OUTPUT FORMAT:
 
 CONSTRAINTS:
 - Focus on highest-scoring patterns first, then secondary issues
+- Trace cascade: If multiple services fail, identify which failed FIRST and triggered others
 - Use only provided line numbers with context
 - Provide specific, actionable commands
 - Include multiple related events if they build a story
 - Keep response under 400 words but be thorough
-- Explain the sequence of events that led to failure
+- Explain the sequence of events that led to failure (initial trigger -> cascade -> final state)
